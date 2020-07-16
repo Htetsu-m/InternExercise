@@ -1,0 +1,151 @@
+mysql> select * from team;
++--------+-------------+-------------+
+| teamId | name        | foundedDate |
++--------+-------------+-------------+
+|      1 | Menu        | 2002-11-20  |
+|      2 | Liverpool   | 2005-01-20  |
+|      3 | Real Madrid | 2004-04-20  |
+|      4 | Manchester  | 2001-05-20  |
+|      5 | Arsenal     | 2001-05-20  |
+|      6 | Chelsea     | 2002-02-20  |
+|      7 | FC Bayern   | 2006-08-20  |
+|      8 | Barcelona   | 2002-05-20  |
+|      9 | Juventus    | 2005-12-20  |
++--------+-------------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from player;
++----------+---------------+---------+-----+-----------+--------+---------+
+| playerId | Name          | Jersyno | Age | Salary    | Height | team_Id |
++----------+---------------+---------+-----+-----------+--------+---------+
+|        1 | Mg Mg         |      12 |  23 | 300000.00 | 166cm  |       6 |
+|        2 | Ko Ko         |      22 |  28 | 350000.00 | 106cm  |       6 |
+|        3 | Aung Aung     |      20 |  30 | 350000.00 | 170cm  |       4 |
+|        4 | Toe Toe       |      25 |  11 | 450000.00 | 171cm  |       1 |
+|        5 | Zaw Zaw       |      12 |  22 | 450000.00 | 171cm  |       2 |
+|        6 | Mg Mya        |       1 |  23 | 200000.00 | 175cm  |       3 |
+|        7 | Mg Aye        |      14 |  20 | 250000.00 | 165cm  |       4 |
+|        8 | Oakar         |       7 |  23 | 550000.00 | 168cm  |       5 |
+|        9 | Fu Ku         |      17 |  23 | 500000.00 | 161cm  |       7 |
+|       10 | Tin Mg Than   |       2 |  18 | 300000.00 | 160cm  |       8 |
+|       11 | Aung Toe Myat |       5 |  19 | 350000.00 | 166cm  |       9 |
+|       12 | Phyoe Ko      |       6 |  17 | 200000.00 | 158cm  |       9 |
+|       13 | Myint Myat    |       8 |  18 | 250000.00 | 160cm  |       8 |
+|       14 | Soe Soe       |       9 |  22 | 650000.00 | 170cm  |       7 |
+|       15 | Myo Zaw       |      10 |  24 | 650000.00 | 176cm  |       5 |
+|       16 | Aung Khaing   |      11 |  29 | 450000.00 | 156cm  |       3 |
+|       17 | Lin Lin       |      13 |  32 | 450000.00 | 186cm  |       2 |
+|       18 | Myo Myo       |      15 |  31 | 550000.00 | 180cm  |       1 |
+|       19 | Zaw Myo       |      16 |  30 | 550000.00 | 182cm  |       1 |
+|       20 | Aye Min       |      18 |  35 | 650000.00 | 180cm  |       2 |
++----------+---------------+---------+-----+-----------+--------+---------+
+20 rows in set (0.00 sec)
+
+mysql> select * from player where team_Id=3;
++----------+-------------+---------+-----+-----------+--------+---------+
+| playerId | Name        | Jersyno | Age | Salary    | Height | team_Id |
++----------+-------------+---------+-----+-----------+--------+---------+
+|        6 | Mg Mya      |       1 |  23 | 200000.00 | 175cm  |       3 |
+|       16 | Aung Khaing |      11 |  29 | 450000.00 | 156cm  |       3 |
++----------+-------------+---------+-----+-----------+--------+---------+
+2 rows in set (0.03 sec)
+
+mysql> select * from player where salary>500000;
++----------+---------+---------+-----+-----------+--------+---------+
+| playerId | Name    | Jersyno | Age | Salary    | Height | team_Id |
++----------+---------+---------+-----+-----------+--------+---------+
+|        8 | Oakar   |       7 |  23 | 550000.00 | 168cm  |       5 |
+|       14 | Soe Soe |       9 |  22 | 650000.00 | 170cm  |       7 |
+|       15 | Myo Zaw |      10 |  24 | 650000.00 | 176cm  |       5 |
+|       18 | Myo Myo |      15 |  31 | 550000.00 | 180cm  |       1 |
+|       19 | Zaw Myo |      16 |  30 | 550000.00 | 182cm  |       1 |
+|       20 | Aye Min |      18 |  35 | 650000.00 | 180cm  |       2 |
++----------+---------+---------+-----+-----------+--------+---------+
+6 rows in set (0.02 sec)
+
+mysql> select name,(select sum(salary) form player where player.team_Id=team.teamId) as salary from team;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'player where player.team_Id=team.teamId) as salary from team' at line 1
+mysql> select name,(select sum(salary) from player where player.team_Id=team.teamId) as salary from team;
++-------------+------------+
+| name        | salary     |
++-------------+------------+
+| Menu        | 1550000.00 |
+| Liverpool   | 1550000.00 |
+| Real Madrid |  650000.00 |
+| Manchester  |  600000.00 |
+| Arsenal     | 1200000.00 |
+| Chelsea     |  650000.00 |
+| FC Bayern   | 1150000.00 |
+| Barcelona   |  550000.00 |
+| Juventus    |  550000.00 |
++-------------+------------+
+9 rows in set (0.30 sec)
+
+mysql> select * from player where height>160cm;
+ERROR 1054 (42S22): Unknown column '160cm' in 'where clause'
+mysql> select * from player where height>'160cm';
++----------+---------------+---------+-----+-----------+--------+---------+
+| playerId | Name          | Jersyno | Age | Salary    | Height | team_Id |
++----------+---------------+---------+-----+-----------+--------+---------+
+|        1 | Mg Mg         |      12 |  23 | 300000.00 | 166cm  |       6 |
+|        3 | Aung Aung     |      20 |  30 | 350000.00 | 170cm  |       4 |
+|        4 | Toe Toe       |      25 |  11 | 450000.00 | 171cm  |       1 |
+|        5 | Zaw Zaw       |      12 |  22 | 450000.00 | 171cm  |       2 |
+|        6 | Mg Mya        |       1 |  23 | 200000.00 | 175cm  |       3 |
+|        7 | Mg Aye        |      14 |  20 | 250000.00 | 165cm  |       4 |
+|        8 | Oakar         |       7 |  23 | 550000.00 | 168cm  |       5 |
+|        9 | Fu Ku         |      17 |  23 | 500000.00 | 161cm  |       7 |
+|       11 | Aung Toe Myat |       5 |  19 | 350000.00 | 166cm  |       9 |
+|       14 | Soe Soe       |       9 |  22 | 650000.00 | 170cm  |       7 |
+|       15 | Myo Zaw       |      10 |  24 | 650000.00 | 176cm  |       5 |
+|       17 | Lin Lin       |      13 |  32 | 450000.00 | 186cm  |       2 |
+|       18 | Myo Myo       |      15 |  31 | 550000.00 | 180cm  |       1 |
+|       19 | Zaw Myo       |      16 |  30 | 550000.00 | 182cm  |       1 |
+|       20 | Aye Min       |      18 |  35 | 650000.00 | 180cm  |       2 |
++----------+---------------+---------+-----+-----------+--------+---------+
+15 rows in set (0.00 sec)
+
+mysql> select name,(select avg(salary)from player where player.team_Id=team.teamId)as average from team;
++-------------+---------------+
+| name        | average       |
++-------------+---------------+
+| Menu        | 516666.666667 |
+| Liverpool   | 516666.666667 |
+| Real Madrid | 325000.000000 |
+| Manchester  | 300000.000000 |
+| Arsenal     | 600000.000000 |
+| Chelsea     | 325000.000000 |
+| FC Bayern   | 575000.000000 |
+| Barcelona   | 275000.000000 |
+| Juventus    | 275000.000000 |
++-------------+---------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from player where salary in(select min(salary)from player);
++----------+----------+---------+-----+-----------+--------+---------+
+| playerId | Name     | Jersyno | Age | Salary    | Height | team_Id |
++----------+----------+---------+-----+-----------+--------+---------+
+|        6 | Mg Mya   |       1 |  23 | 200000.00 | 175cm  |       3 |
+|       12 | Phyoe Ko |       6 |  17 | 200000.00 | 158cm  |       9 |
++----------+----------+---------+-----+-----------+--------+---------+
+2 rows in set (0.14 sec)
+
+mysql> select * from player where salary in(select max(salary)from player);
++----------+---------+---------+-----+-----------+--------+---------+
+| playerId | Name    | Jersyno | Age | Salary    | Height | team_Id |
++----------+---------+---------+-----+-----------+--------+---------+
+|       14 | Soe Soe |       9 |  22 | 650000.00 | 170cm  |       7 |
+|       15 | Myo Zaw |      10 |  24 | 650000.00 | 176cm  |       5 |
+|       20 | Aye Min |      18 |  35 | 650000.00 | 180cm  |       2 |
++----------+---------+---------+-----+-----------+--------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select * from player where age>30 and salary>200000;
++----------+---------+---------+-----+-----------+--------+---------+
+| playerId | Name    | Jersyno | Age | Salary    | Height | team_Id |
++----------+---------+---------+-----+-----------+--------+---------+
+|       17 | Lin Lin |      13 |  32 | 450000.00 | 186cm  |       2 |
+|       18 | Myo Myo |      15 |  31 | 550000.00 | 180cm  |       1 |
+|       20 | Aye Min |      18 |  35 | 650000.00 | 180cm  |       2 |
++----------+---------+---------+-----+-----------+--------+---------+
+3 rows in set (0.00 sec)
